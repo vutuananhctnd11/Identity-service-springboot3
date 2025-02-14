@@ -1,7 +1,4 @@
-package com.springboot.identity_service.dto.request;
-
-import java.time.LocalDate;
-import java.util.List;
+package com.springboot.identity_service.dto.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,11 +12,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserUpdateRequest {
+public class PermissionResponse {
 
-	String password;
-	String firstName;
-	String lastName;
-	LocalDate dob;
-	List<String> roles;
+	String name;
+	String description;
 }

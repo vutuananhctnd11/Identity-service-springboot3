@@ -2,6 +2,8 @@ package com.springboot.identity_service.dto.request;
 
 import java.time.LocalDate;
 
+import com.springboot.identity_service.validator.DobConstraint;
+
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,13 +22,14 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)	//every file is private
 public class UserCreationRequest {
 
-	@Size(min =3, message = "USERNAME_INVALID")//validation data
+	@Size(min = 4, message = "USERNAME_INVALID")//validation data
 	String username;
 	
-	@Size(min = 8, message = "PASSWORD_INVALID")
+	@Size(min = 6, message = "PASSWORD_INVALID")
 	String password;
 	String firstName;
 	String lastName;
+	@DobConstraint(min = 16, message = "INVALID_DOB")
 	LocalDate dob;	
 	
 }

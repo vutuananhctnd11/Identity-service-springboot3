@@ -17,6 +17,7 @@ import com.springboot.identity_service.enums.Role;
 import com.springboot.identity_service.exception.AppException;
 import com.springboot.identity_service.exception.ErrorCode;
 import com.springboot.identity_service.mapper.UserMapper;
+import com.springboot.identity_service.repository.RoleRepository;
 import com.springboot.identity_service.repository.UserRepository;
 
 import lombok.AccessLevel;
@@ -36,6 +37,8 @@ public class UserService {
 	
 	PasswordEncoder passwordEncoder;
 	
+	RoleRepository roleRepository;
+	
 	public UserResponse createRequest (UserCreationRequest request) {
 		
 		if (userRepository.existsByUsername(request.getUsername())) {
@@ -47,22 +50,21 @@ public class UserService {
 		HashSet<String> roles = new HashSet<>();
 		roles.add(Role.USER.name());
 		
-		user.setRoles(roles);
+		//user.setRoles(roles);
 		
 		
 		return userMapper.toUserResponse(userRepository.save(user)) ;
 	}
 	
 	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasAuthority('UPDATE_DATA')") // for check permission
 	public List<UserResponse> getUsers (){
-		log.info("In method get Users");
 		return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
 	}
 	
 	
 	@PostAuthorize("returnObject.username == authentication.name")
 	public UserResponse getUser (String id) {
-		log.info("In method get Users by ID");
 		return userMapper.toUserResponse(userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTS)));
 	}
 	
@@ -77,6 +79,10 @@ public class UserService {
 		User user = userRepository.findById(UserId)
 				.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTS));
 		userMapper.updateUser(user, request);
+		user.setPassword(passwordEncoder.encode(request.getPassword()));
+		
+		List<com.springboot.identity_service.entity.Role> roles = roleRepository.findAllById(request.getRoles());
+		user.setRoles(new HashSet<>(roles));
 		
 		return userMapper.toUserResponse(userRepository.save(user));
 	}

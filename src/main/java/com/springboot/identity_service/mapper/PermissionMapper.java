@@ -4,17 +4,17 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import com.springboot.identity_service.dto.request.PermissionRequest;
 import com.springboot.identity_service.dto.request.UserCreationRequest;
 import com.springboot.identity_service.dto.request.UserUpdateRequest;
+import com.springboot.identity_service.dto.response.PermissionResponse;
 import com.springboot.identity_service.dto.response.UserResponse;
+import com.springboot.identity_service.entity.Permission;
 import com.springboot.identity_service.entity.User;
 
 @Mapper(componentModel = "spring")
-public interface UserMapper {
+public interface PermissionMapper {
 
-	@Mapping(target = "id", ignore = true)
-	User toUser (UserCreationRequest request);
-	UserResponse toUserResponse (User user);
-	@Mapping(target = "roles", ignore = true)
-	void updateUser (@MappingTarget User user, UserUpdateRequest request);
+	Permission toPermission (PermissionRequest request);
+	PermissionResponse toPermissionResponse (Permission permission);
 }

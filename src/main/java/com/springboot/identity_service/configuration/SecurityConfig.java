@@ -18,8 +18,6 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.springboot.identity_service.enums.Role;
-
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
@@ -55,13 +53,13 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
     /**
-     * This bean to change role "SCOPE_" to "ROLE_"
+     * This bean to change role "SCOPE_" to ""
      * @return
      */
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter () {
     	JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-    	jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+    	jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
     	
     	JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
     	jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
