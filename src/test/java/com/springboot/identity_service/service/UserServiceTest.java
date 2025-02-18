@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.TestPropertySource;
 
 import com.springboot.identity_service.dto.request.UserCreationRequest;
 import com.springboot.identity_service.dto.response.UserResponse;
@@ -24,6 +25,7 @@ import com.springboot.identity_service.repository.UserRepository;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestPropertySource("/test.properties")
 public class UserServiceTest {
 
 	
