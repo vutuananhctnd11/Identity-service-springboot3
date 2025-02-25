@@ -114,6 +114,25 @@
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/org.springframework.security/spring-security-test -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<version>6.3.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>mysql</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 
 	</dependencies>
@@ -171,10 +190,11 @@
 				</executions>
 				<configuration>
 					<excludes>
-						<!--<exclude>com/devteria/identityservice/dto/**</exclude>
-						<exclude>com/devteria/identityservice/entity/**</exclude>
-						<exclude>com/devteria/identityservice/mapper/**</exclude>
-						<exclude>com/devteria/identityservice/configuration/**</exclude>-->
+						<exclude>com/springboot/identity_service/dto/**</exclude>
+						<exclude>com/springboot/identity_service/entity/**</exclude>
+						<exclude>com/springboot/identity_service/mapper/**</exclude>
+						<exclude>
+							com/springboot/identity_service/configuration/**</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
