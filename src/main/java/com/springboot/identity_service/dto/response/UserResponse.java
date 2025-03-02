@@ -3,8 +3,6 @@ package com.springboot.identity_service.dto.response;
 import java.time.LocalDate;
 import java.util.Set;
 
-import com.springboot.identity_service.entity.Role;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,10 +17,10 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
 
-	String id;
-	String username;
-	String firstName;
-	String lastName;
-	LocalDate dob;
-	Set<RoleResponse> roles;
+    String id;
+    String username;
+    String firstName;
+    String lastName;
+    LocalDate dob;
+    Set<RoleResponse> roles;
 }

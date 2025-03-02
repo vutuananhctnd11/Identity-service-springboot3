@@ -198,6 +198,43 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.12</version>
+			</plugin>
+			<plugin>
+				<!--https://mvnrepository.com/artifact/com.diffplug.spotless/spotless-maven-plugin -->
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>2.44.0</version>
+				<configuration>
+					<java>
+						<removeUnusedImports />
+						<toggleOffOn />
+						<trimTrailingWhitespace />
+						<endWithNewline />
+						<indent>
+							<tabs>true</tabs>
+							<spacesPerTab>4</spacesPerTab>
+						</indent>
+						<palantirJavaFormat />
+						<importOrder>
+							<!-- Specify either order or file, but not both -->
+							<order>java,jakarta,org,com,com.diffplug,</order>
+						</importOrder>
+					</java>
+				</configuration>
+				<!--				<executions>-->
+				<!--					<execution>-->
+				<!--						<phase>compile</phase>-->
+				<!--						<goals>-->
+				<!--							<goal>check</goal>-->
+				<!--						</goals>-->
+				<!--					</execution>-->
+				<!--				</executions>-->
+
+			</plugin>
 
 		</plugins>
 	</build>

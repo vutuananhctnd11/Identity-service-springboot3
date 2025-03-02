@@ -26,68 +26,65 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@RequiredArgsConstructor		//create a constructor, after that add all FINAL field to constructor and jnject it to class
+@RequiredArgsConstructor // create a constructor, after that add all FINAL field to constructor and jnject it to class
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserService {
 
-	UserRepository userRepository;
-	
-	UserMapper userMapper;
-	
-	PasswordEncoder passwordEncoder;
-	
-	RoleRepository roleRepository;
-	
-	public UserResponse createRequest (UserCreationRequest request) {
-		
-		if (userRepository.existsByUsername(request.getUsername())) {
-			throw new AppException(ErrorCode.USER_EXISTS);
-		}
-		User user = userMapper.toUser(request);
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		
-		HashSet<String> roles = new HashSet<>();
-		roles.add(Role.USER.name());
-		
-		//user.setRoles(roles);
-		
-		
-		return userMapper.toUserResponse(userRepository.save(user)) ;
-	}
-	
-	@PreAuthorize("hasRole('ADMIN')")
-	//@PreAuthorize("hasAuthority('UPDATE_DATA')") // for check permission
-	public List<UserResponse> getUsers (){
-		return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
-	}
-	
-	
-	@PostAuthorize("returnObject.username == authentication.name")
-	public UserResponse getUser (String id) {
-		return userMapper.toUserResponse(userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTS)));
-	}
-	
-	
-	public UserResponse getMyInfo () {
-		String name = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user =  userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTS));
-		return userMapper.toUserResponse(user);
-	}
-	
-	public UserResponse updateUser (String UserId, UserUpdateRequest request) {
-		User user = userRepository.findById(UserId)
-				.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTS));
-		userMapper.updateUser(user, request);
-		user.setPassword(passwordEncoder.encode(request.getPassword()));
-		
-		List<com.springboot.identity_service.entity.Role> roles = roleRepository.findAllById(request.getRoles());
-		user.setRoles(new HashSet<>(roles));
-		
-		return userMapper.toUserResponse(userRepository.save(user));
-	}
-	
-	public void deletaUser (String userId) {
-		userRepository.deleteById(userId);
-	}
+    UserRepository userRepository;
+
+    UserMapper userMapper;
+
+    PasswordEncoder passwordEncoder;
+
+    RoleRepository roleRepository;
+
+    public UserResponse createRequest(UserCreationRequest request) {
+
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new AppException(ErrorCode.USER_EXISTS);
+        }
+        User user = userMapper.toUser(request);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        HashSet<String> roles = new HashSet<>();
+        roles.add(Role.USER.name());
+
+        // user.setRoles(roles);
+
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasAuthority('UPDATE_DATA')") // for check permission
+    public List<UserResponse> getUsers() {
+        return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
+    }
+
+    @PostAuthorize("returnObject.username == authentication.name")
+    public UserResponse getUser(String id) {
+        return userMapper.toUserResponse(
+                userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTS)));
+    }
+
+    public UserResponse getMyInfo() {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTS));
+        return userMapper.toUserResponse(user);
+    }
+
+    public UserResponse updateUser(String UserId, UserUpdateRequest request) {
+        User user = userRepository.findById(UserId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTS));
+        userMapper.updateUser(user, request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        List<com.springboot.identity_service.entity.Role> roles = roleRepository.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
+
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    public void deletaUser(String userId) {
+        userRepository.deleteById(userId);
+    }
 }

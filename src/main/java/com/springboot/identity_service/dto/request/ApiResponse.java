@@ -15,11 +15,11 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonInclude(JsonInclude.Include.NON_NULL)	//remove null field
+@JsonInclude(JsonInclude.Include.NON_NULL) // remove null field
 public class ApiResponse<T> {
-	@Default
-	int code =1000;
-	String message;
-	T result;
+    @Default
+    int code = 1000;
 
+    String message;
+    T result;
 }

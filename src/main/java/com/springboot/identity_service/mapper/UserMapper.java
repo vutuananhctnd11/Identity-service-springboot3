@@ -12,9 +12,11 @@ import com.springboot.identity_service.entity.User;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-	@Mapping(target = "id", ignore = true)
-	User toUser (UserCreationRequest request);
-	UserResponse toUserResponse (User user);
-	@Mapping(target = "roles", ignore = true)
-	void updateUser (@MappingTarget User user, UserUpdateRequest request);
+    @Mapping(target = "id", ignore = true)
+    User toUser(UserCreationRequest request);
+
+    UserResponse toUserResponse(User user);
+
+    @Mapping(target = "roles", ignore = true)
+    void updateUser(@MappingTarget User user, UserUpdateRequest request);
 }

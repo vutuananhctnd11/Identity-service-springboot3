@@ -23,31 +23,30 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RoleService {
-	
-	RoleRepository roleRepository;
-	
-	PermissionRepository permissionRepository;
-	
-	RoleMapper roleMapper;
-	
-	public RoleResponse create (RoleRequest request) {
-		Role role = roleMapper.toRole(request);
-		
-		List<Permission> permissions =  permissionRepository.findAllById(request.getPermissions());
-		
-		role.setPermissions(new HashSet<>(permissions));
-		
-		roleRepository.save(role);
-		return roleMapper.toRoleResponse(role);
-	}
-	
-	public List<RoleResponse> getAll(){
-		List<Role> roles = roleRepository.findAll();
-		return roles.stream().map(roleMapper::toRoleResponse).toList();
-	}
-	
-	public void delete(String role) {
-		roleRepository.deleteById(role);
-	}
 
+    RoleRepository roleRepository;
+
+    PermissionRepository permissionRepository;
+
+    RoleMapper roleMapper;
+
+    public RoleResponse create(RoleRequest request) {
+        Role role = roleMapper.toRole(request);
+
+        List<Permission> permissions = permissionRepository.findAllById(request.getPermissions());
+
+        role.setPermissions(new HashSet<>(permissions));
+
+        roleRepository.save(role);
+        return roleMapper.toRoleResponse(role);
+    }
+
+    public List<RoleResponse> getAll() {
+        List<Role> roles = roleRepository.findAll();
+        return roles.stream().map(roleMapper::toRoleResponse).toList();
+    }
+
+    public void delete(String role) {
+        roleRepository.deleteById(role);
+    }
 }

@@ -30,92 +30,87 @@ import com.springboot.identity_service.repository.UserRepository;
 @TestPropertySource("/test.properties")
 public class UserServiceTest {
 
-	
-	@Autowired
-	private UserService userService;
-	
-	@MockBean
-	private UserRepository userRepository;
-	
-	private UserCreationRequest request;
-	private UserResponse userResponse;
-	private User user;
-	
-	
-	@BeforeEach
-	private void initData() {
-		LocalDate dob = LocalDate.of(1990, 03, 02);
-		request = UserCreationRequest.builder()
-				.username("john")
-				.firstName("John")
-				.lastName("Doe")
-				.password("12345678")
-				.dob(dob)
-				.build();
-		userResponse = UserResponse.builder()
-				.id("hfskjdfsdf")
-				.username("john")
-				.firstName("John")
-				.lastName("Doe")
-				.dob(dob)		
-				.build();
-		user = User.builder()
-				.id("hfskjdfsdf")
-				.username("john")
-				.firstName("John")
-				.lastName("Doe")
-				.dob(dob)	
-				.build();
-	}
-	
-	@Test
-	public void createUser_validRequest_success () {
-		//given
-		Mockito.when(userRepository.existsByUsername(anyString())).thenReturn(false);
-		Mockito.when(userRepository.save(any())).thenReturn(user);
-		
-		//when
-		UserResponse response = userService.createRequest(request);
-		
-		//then
-		Assertions.assertThat(response.getId()).isEqualTo("hfskjdfsdf");
-		Assertions.assertThat(response.getUsername()).isEqualTo("john");
-		
-	}
-	
-	@Test
-	public void createUser_userExists_fail () {
-		//given
-		Mockito.when(userRepository.existsByUsername(anyString())).thenReturn(true);
-		
-		//when
-		AppException exception =  assertThrows(AppException.class, () -> userService.createRequest(request));
-		
-		assertThat(exception.getErrorCode().getCode()).isEqualTo(1002);
-		assertThat(exception.getErrorCode().getMessage()).isEqualTo("User exists");
-		
-	}
-	
-	@Test
-	@WithMockUser(username = "john")
-	public void getMyInfo_valid_success() {
-		Mockito.when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
-		
-		UserResponse response = userService.getMyInfo();
-		
-		assertThat(response.getUsername()).isEqualTo("john");
-		assertThat(response.getId()).isEqualTo("hfskjdfsdf");
-	}
-	
-	@Test
-	@WithMockUser(username = "john")
-	public void getMyInfo_userNotFound_fail() {
-		Mockito.when(userRepository.findByUsername(anyString())).thenReturn(Optional.ofNullable(null));
-		
-		//when
-		AppException exception =  assertThrows(AppException.class, () -> userService.getMyInfo());
-		
-		assertThat(exception.getErrorCode().getCode()).isEqualTo(1005);
-		
-	}
+    @Autowired
+    private UserService userService;
+
+    @MockBean
+    private UserRepository userRepository;
+
+    private UserCreationRequest request;
+    private UserResponse userResponse;
+    private User user;
+
+    @BeforeEach
+    private void initData() {
+        LocalDate dob = LocalDate.of(1990, 03, 02);
+        request = UserCreationRequest.builder()
+                .username("john")
+                .firstName("John")
+                .lastName("Doe")
+                .password("12345678")
+                .dob(dob)
+                .build();
+        userResponse = UserResponse.builder()
+                .id("hfskjdfsdf")
+                .username("john")
+                .firstName("John")
+                .lastName("Doe")
+                .dob(dob)
+                .build();
+        user = User.builder()
+                .id("hfskjdfsdf")
+                .username("john")
+                .firstName("John")
+                .lastName("Doe")
+                .dob(dob)
+                .build();
+    }
+
+    @Test
+    public void createUser_validRequest_success() {
+        // given
+        Mockito.when(userRepository.existsByUsername(anyString())).thenReturn(false);
+        Mockito.when(userRepository.save(any())).thenReturn(user);
+
+        // when
+        UserResponse response = userService.createRequest(request);
+
+        // then
+        Assertions.assertThat(response.getId()).isEqualTo("hfskjdfsdf");
+        Assertions.assertThat(response.getUsername()).isEqualTo("john");
+    }
+
+    @Test
+    public void createUser_userExists_fail() {
+        // given
+        Mockito.when(userRepository.existsByUsername(anyString())).thenReturn(true);
+
+        // when
+        AppException exception = assertThrows(AppException.class, () -> userService.createRequest(request));
+
+        assertThat(exception.getErrorCode().getCode()).isEqualTo(1002);
+        assertThat(exception.getErrorCode().getMessage()).isEqualTo("User exists");
+    }
+
+    @Test
+    @WithMockUser(username = "john")
+    public void getMyInfo_valid_success() {
+        Mockito.when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+
+        UserResponse response = userService.getMyInfo();
+
+        assertThat(response.getUsername()).isEqualTo("john");
+        assertThat(response.getId()).isEqualTo("hfskjdfsdf");
+    }
+
+    @Test
+    @WithMockUser(username = "john")
+    public void getMyInfo_userNotFound_fail() {
+        Mockito.when(userRepository.findByUsername(anyString())).thenReturn(Optional.ofNullable(null));
+
+        // when
+        AppException exception = assertThrows(AppException.class, () -> userService.getMyInfo());
+
+        assertThat(exception.getErrorCode().getCode()).isEqualTo(1005);
+    }
 }

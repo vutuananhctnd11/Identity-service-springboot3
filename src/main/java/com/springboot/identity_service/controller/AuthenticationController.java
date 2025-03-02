@@ -26,37 +26,31 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationController {
-	AuthenticationService authenticationService;
+    AuthenticationService authenticationService;
 
-	@PostMapping("/token")
-	ApiResponse<AuthenticationResponse> authenticate (@RequestBody AuthenticationRequest request){
-		AuthenticationResponse result = authenticationService.authenticate(request);
-		return ApiResponse.<AuthenticationResponse>builder()
-				.result(result)
-				.build();
-	}
-	
-	
-	@PostMapping("/introspect")
-	ApiResponse<IntrospectResponse> authenticate (@RequestBody IntrospectRequest request) throws JOSEException, ParseException{
-		IntrospectResponse result = authenticationService.introspect(request);
-		return ApiResponse.<IntrospectResponse>builder()
-				.result(result)
-				.build();
-	}
-	
-	@PostMapping("/logout")
-	ApiResponse<Void> logout (@RequestBody LogoutRequest request) throws JOSEException, ParseException{
-		authenticationService.logout(request);
-		return ApiResponse.<Void>builder().build();
-	}
-	
-	
-	@PostMapping("/refresh")
-	ApiResponse<AuthenticationResponse> authenticate (@RequestBody RefreshRequest request) throws JOSEException, ParseException{
-		AuthenticationResponse result = authenticationService.refreshToken(request);
-		return ApiResponse.<AuthenticationResponse>builder()
-				.result(result)
-				.build();
-	}
+    @PostMapping("/token")
+    ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+        AuthenticationResponse result = authenticationService.authenticate(request);
+        return ApiResponse.<AuthenticationResponse>builder().result(result).build();
+    }
+
+    @PostMapping("/introspect")
+    ApiResponse<IntrospectResponse> authenticate(@RequestBody IntrospectRequest request)
+            throws JOSEException, ParseException {
+        IntrospectResponse result = authenticationService.introspect(request);
+        return ApiResponse.<IntrospectResponse>builder().result(result).build();
+    }
+
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws JOSEException, ParseException {
+        authenticationService.logout(request);
+        return ApiResponse.<Void>builder().build();
+    }
+
+    @PostMapping("/refresh")
+    ApiResponse<AuthenticationResponse> authenticate(@RequestBody RefreshRequest request)
+            throws JOSEException, ParseException {
+        AuthenticationResponse result = authenticationService.refreshToken(request);
+        return ApiResponse.<AuthenticationResponse>builder().result(result).build();
+    }
 }
