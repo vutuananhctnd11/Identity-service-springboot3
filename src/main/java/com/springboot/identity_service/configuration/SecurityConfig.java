@@ -12,6 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableMethodSecurity
@@ -37,7 +41,9 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT)
+        httpSecurity
+        		.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        		.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT)
                 .permitAll()
                 .anyRequest()
                 .authenticated());
@@ -51,6 +57,26 @@ public class SecurityConfig {
 
         return httpSecurity.build();
     }
+    
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+    	CorsConfiguration corsConfiguration =  new CorsConfiguration();
+    	
+    	corsConfiguration.addAllowedOrigin("http://localhost:3000");
+    	corsConfiguration.addAllowedMethod("*");
+    	corsConfiguration.addAllowedHeader("*");
+    	
+    	UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+    	urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+    	   	
+    	return urlBasedCorsConfigurationSource;   
+    }
+    
+    
+    
+    
+    
+    
     /**
      * This bean to change role "SCOPE_" to ""
      * @return
