@@ -3,6 +3,7 @@ package com.springboot.identity_service.entity;
 import java.time.LocalDate;
 import java.util.Set;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,6 +31,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID) // các chuỗi sinh ngẫu nhiên
     String id;
 
+    @Column(name = "username", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")	//không phân biệt chữ hoa chữ thường
     String username;
     String password;
     String firstName;

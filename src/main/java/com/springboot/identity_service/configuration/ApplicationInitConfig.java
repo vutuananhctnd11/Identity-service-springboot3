@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.springboot.identity_service.entity.User;
-import com.springboot.identity_service.enums.Role;
+import com.springboot.identity_service.enums.RoleEnums;
 import com.springboot.identity_service.repository.UserRepository;
 
 import lombok.AccessLevel;
@@ -35,7 +35,7 @@ public class ApplicationInitConfig {
         return args -> {
             if (userRepository.findByUsername("admin").isEmpty()) {
                 Set<String> roles = new HashSet<String>();
-                roles.add(Role.ADMIN.name());
+                roles.add(RoleEnums.ADMIN.name());
                 User user = User.builder()
                         .username("admin")
                         .password(passwordEncoder.encode("admin"))

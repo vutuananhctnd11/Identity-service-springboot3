@@ -3,6 +3,7 @@ package com.springboot.identity_service.service;
 import java.util.HashSet;
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,8 +13,9 @@ import org.springframework.stereotype.Service;
 import com.springboot.identity_service.dto.request.UserCreationRequest;
 import com.springboot.identity_service.dto.request.UserUpdateRequest;
 import com.springboot.identity_service.dto.response.UserResponse;
+import com.springboot.identity_service.entity.Role;
 import com.springboot.identity_service.entity.User;
-import com.springboot.identity_service.enums.Role;
+import com.springboot.identity_service.enums.RoleEnums;
 import com.springboot.identity_service.exception.AppException;
 import com.springboot.identity_service.exception.ErrorCode;
 import com.springboot.identity_service.mapper.UserMapper;
@@ -41,18 +43,28 @@ public class UserService {
 
     public UserResponse createRequest(UserCreationRequest request) {
 
-        if (userRepository.existsByUsername(request.getUsername())) {
-            throw new AppException(ErrorCode.USER_EXISTS);
-        }
+//        if (userRepository.existsByUsername(request.getUsername())) {
+//            throw new AppException(ErrorCode.USER_EXISTS);
+//        }
+    	
+    	
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        HashSet<String> roles = new HashSet<>();
-        roles.add(Role.USER.name());
+        HashSet<Role> roles = new HashSet<>();
+        
+        roles.add(Role.builder().name(RoleEnums.USER.name()).description(RoleEnums.USER.name()).build());
 
-        // user.setRoles(roles);
+        user.setRoles(roles);
+        
+        try {
+        	user = userRepository.save(user);
+        	
+        } catch (DataIntegrityViolationException e) {
+			throw new AppException(ErrorCode.USER_EXISTS);
+		}
 
-        return userMapper.toUserResponse(userRepository.save(user));
+        return userMapper.toUserResponse(user);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
